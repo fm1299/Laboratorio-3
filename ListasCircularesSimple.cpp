@@ -258,6 +258,20 @@ public:
 
         }
     }
+    
+    int count_even()
+    {
+        int counter{0};
+        Nodo<T> *aux = this->m_pHead;
+        for (; aux; aux = aux->m_pSig)
+        {
+            if (aux->m_Dato % 2 == 0)
+            {
+                counter++;
+            }
+        }
+        return counter;
+    }
 };
 
 int main()
