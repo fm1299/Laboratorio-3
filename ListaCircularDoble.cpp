@@ -269,6 +269,7 @@ void procesar_dato(ListD<pair<string, int> > &l, string s) {
 	}
 	Nodo<pair<string, int> > * aux = l.getHead();	
 	while(true) {
+		///si encuentra la palabra, aumenta uno al contador y termina
 		if((aux->m_Dato).first == s) {
 			(aux->m_Dato).second++;
 			return;	
@@ -276,7 +277,8 @@ void procesar_dato(ListD<pair<string, int> > &l, string s) {
 		aux = aux -> m_pSig;
 		if(aux == l.getHead()) break;	
 	}
-	l.push_back_iterativo({s, 1});
+	pair<string, int> p = {s, 1};
+	l.push_back_iterativo(p);
 }
 
 int main() {
@@ -289,12 +291,12 @@ int main() {
 		input >> s; 			
 		procesar_dato(A, s);
 	}
-	
+	pair<string, int> a, b;
 	Nodo<pair<string, int> > * nodo = A.getHead();
 	cout << "Palabra \t numero de ocurrencias\n";
 	while(true) {
 		cout << nodo->m_Dato.first << "\t\t\t" << nodo->m_Dato.second << '\n';
 		nodo = nodo->m_pSig;
-		if(nodo = A.getHead()) break; 
+		if(nodo == A.getHead()) break; 
 	}	
 }
