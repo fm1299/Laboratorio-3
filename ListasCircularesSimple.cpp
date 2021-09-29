@@ -32,7 +32,7 @@ public:
         this->size = 0;
     }
     //insertar al inicio(recursivo e iterativo)
-    void push_front_dato(T dato)
+    void push_front(T dato)
     {
         Nodo<T> *new_node = new Nodo<T>(dato);
         if (!m_pHead)
@@ -50,10 +50,11 @@ public:
         }
     }
 
-    void push_front(Nodo<T> *tmp, T d)
+    /*void push_front(Nodo<T> *tmp, T d)
     {
 
-        if (tmp->m_pSig == nullptr){
+        if (tmp->m_pSig == nullptr)
+        {
             tmp->m_pSig = new Nodo<T>(d);
             this->m_ptail->m_pSig = m_pHead;
         }
@@ -69,8 +70,8 @@ public:
             m_pHead = new Nodo<T>(d);
         else
             this->push_front(this->m_pHead, d);
-    }
-    
+    }*/
+    /*Insertar al final iteritativo-recursivo*/
     void push_back(T dato)
     {
         Nodo<T> *new_node = new Nodo<T>(dato);
@@ -94,12 +95,20 @@ public:
     }
     void recursive_pushBack(T dato, Nodo<T> *ptr)
     {
+        if (!ptr)
+        {
+            Nodo<T> *new_node = new Nodo<T>(dato);
+            ptr = new_node;
+            ptr->m_pSig = ptr;
+            this->size++;
+            return;
+        }
         if (ptr == this->m_ptail)
         {
             Nodo<T> *new_node = new Nodo<T>(dato);
+            new_node->m_pSig = ptr->m_pSig;
             this->m_ptail->m_pSig = new_node;
-            this->m_ptail=new_node;
-            this->m_ptail->m_pSig = this->m_pHead;
+            this->m_ptail = new_node;
             return;
         }
         else
@@ -107,6 +116,11 @@ public:
             recursive_pushBack(dato, ptr->m_pSig);
         }
     }
+    void recursivePB(T dato)
+    {
+        this->recursive_pushBack(dato, this->m_pHead);
+    }
+    /*Find iterativo y recursivo*/
     bool find_iterativo(T d)
     {
         Nodo<T> *tmp = m_pHead;
@@ -124,18 +138,18 @@ public:
 
         if (tmp->m_Dato == d)
             return true;
-        else if(tmp->m_Dato!=d)
+        else if (tmp->m_Dato != d)
         {
             return false;
         }
         return this->findRecursivo(tmp->m_pSig, d);
     }
 
-    bool mostrarfindRecursivo(T d)
+    bool recursive_find(T d)
     {
         return this->findRecursivo(this->m_pHead, d);
     }
-
+    /*Max iterativo y recursivo*/
     int iterative_max()
     {
         Nodo<T> *aux = m_pHead;
@@ -153,10 +167,10 @@ public:
 
     T recursive_max()
     {
-        if(m_pHead == nullptr)
+        if (m_pHead == nullptr)
             return;
         returnrecursive_max(this->m_pHead, this->m_pHead->m_Dato);
-    } 
+    }
 
     T recursive_max(Nodo<T> *nodo, T tmp_max)
     {
@@ -170,6 +184,7 @@ public:
         }
         return recursive_max(nodo->m_pSig, tmp_max);
     }
+    /*Print recursivo e iterativo*/
     void print_iterativo()
     {
         Nodo<T> *temp = m_pHead;
@@ -183,51 +198,56 @@ public:
                 temp = temp->m_pSig;
             }
         }
-            
     }
 
     void recursive_print(Nodo<T> *nodo)
     {
-        if (nodo)
+        cout << nodo->m_Dato << "->";
+        if (!nodo)
         {
-            recursive_print(nodo->m_pSig);
-            
-            cout << nodo->m_Dato << "->";
+            return;
+        }
+        if (nodo == this->m_ptail)
+        {
+            return;
         }
         else
         {
-            cout << '\n';
+            recursive_print(nodo->m_pSig);
         }
     }
     void recursive_print()
     {
         recursive_print(this->m_pHead);
     }
-
-    void insertByPosition(T value, int pos) 
-    { 
+    /*Insercion por posicion*/
+    void insertByPosition(T value, int pos)
+    {
         Nodo<T> *newNode = new Nodo<T>(value);
-        if(m_pHead==nullptr){
-            m_pHead = newNode;
-        } 
-        else 
+        if (m_pHead == nullptr)
         {
-            if(pos==0){
-                push_front(value);
+            m_pHead = newNode;
         }
-        else{
-            Nodo<T> *current_node = m_pHead;
-            Nodo<T> *previous_node = nullptr;
-            for (int count = 1; count < pos; count++)
+        else
+        {
+            if (pos == 0)
             {
-                previous_node=current_node;
-                current_node=current_node->m_pSig;
+                push_front(value);
             }
-            previous_node->m_pSig=newNode;
-            newNode->m_pSig = current_node;
+            else
+            {
+                Nodo<T> *current_node = m_pHead;
+                Nodo<T> *previous_node = nullptr;
+                for (int count = 1; count < pos; count++)
+                {
+                    previous_node = current_node;
+                    current_node = current_node->m_pSig;
+                }
+                previous_node->m_pSig = newNode;
+                newNode->m_pSig = current_node;
+            }
         }
-    }
-    size++;
+        size++;
     }
 
     void insertar_alfabetica(T d)
@@ -253,12 +273,11 @@ public:
                 }
             }
 
-            m_pHead= new_node;
+            m_pHead = new_node;
             aux_node = aux_node->m_pSig;
-
         }
     }
-    
+    /*Contar pares*/
     int count_even()
     {
         int counter{0};
@@ -276,12 +295,13 @@ public:
 
 int main()
 {
-
     List<int> L1;
-    //L1.insertar_alfabetica(2);
-    L1.push_front_dato(4);
-    L1.push_front_recursivo(2);
+    L1.push_front(4);
+    L1.push_back(6);
+    L1.push_back(8);
+    L1.push_back(12);
+    L1.push_front(1);
+    L1.recursivePB(7);
     L1.recursive_print();
-    L1.print_iterativo();
     return 0;
 }
